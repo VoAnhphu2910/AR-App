@@ -7,33 +7,6 @@ public class ObjectMovement : MonoBehaviour
 { 
     public GameObject _objectMovement;
     public Raycast raycast;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(inra)
-        {
-            Debug.Log("in");
-        }
-    }
-
-    bool inra = false; 
-    public void enter()
-    {
-        inra = true;
-        Debug.Log("enter "+inra);
-    }
-
-    public void Exit()
-    {
-        inra = false;
-        Debug.Log("exit "+inra);
-    }
 
     // Di chuyển theo chiều ngang (trái phải)
     public void MoveHorizontal(float dir)
@@ -77,8 +50,7 @@ public class ObjectMovement : MonoBehaviour
     public void Destroy()
     {
         Destroy(_objectMovement);
-        raycast.isPointerObject = false;
-        raycast.panelButtonSelect.SetActive(true);
+        UIController.instance.panelMenuGame.SetActive(true);
         raycast.panelSelected.SetActive(false);
     }
 

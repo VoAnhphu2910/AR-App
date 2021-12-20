@@ -22,10 +22,11 @@ public class Raycast : MonoBehaviour
     public GameObject panelButtonSelect;
     public GameObject panelSelected;
 
-
+    [SerializeField]
+    private GameObject objLeanTouch;
     //public ObjectMovement objectMovement;
 
-    public bool isPointerObject = false;
+    //public bool isPointerObject = false;
     void Start()
     {
     }
@@ -33,7 +34,7 @@ public class Raycast : MonoBehaviour
     void Update()
     {
             UpdateCursor();
-
+        /*
      //   if (EventSystem.current.IsPointerOverGameObject() &&
      //EventSystem.current.currentSelectedGameObject != null &&
      //EventSystem.current.currentSelectedGameObject.CompareTag("Object"))
@@ -73,8 +74,9 @@ public class Raycast : MonoBehaviour
                     GameObject.Instantiate(objectToPlace, hits[0].pose.position, hits[0].pose.rotation);
                 }
             }
-            */
+            
         //}
+        */
     }
 
     /*  Hàm để xác định có trỏ lên UI hay không
@@ -88,11 +90,16 @@ public class Raycast : MonoBehaviour
     }
     */
 
-        // Nút Yes sẽ đặt vật thể ra màn hình
+    GameObject obj;
+    // Nút Yes sẽ đặt vật thể ra màn hình
     public void Yes()
     {
+
+        obj = Instantiate(objLeanTouch, transform.position + new Vector3(0, 0, 3f), transform.rotation);
+
         // Tạo vật thể tại vị trí được chọn
-        GameObject.Instantiate(objectToPlace, transform.position + new Vector3(0, 0, 1f), transform.rotation);
+        var a = GameObject.Instantiate(objectToPlace, transform.position + new Vector3(0, 0, 3f), transform.rotation);
+        a.transform.SetParent(obj.transform, false);
 
         // Xóa vật được chọn vì đã tạo ra vật thể mới
         Destroy(_objectPlace);
@@ -104,6 +111,7 @@ public class Raycast : MonoBehaviour
     // Nút No để ẩn đi panel 
     public void No()
     {
+        UIController.instance.canvas.SetActive(true);
         // Ẩn panel đi
         panelNotification.SetActive(false);
 
@@ -121,7 +129,7 @@ public class Raycast : MonoBehaviour
     public void SetObject(GameObject setObject)
     {
         // cho vật thể được chọn và hiển thị ra ngay vị trí được chọn trên màn hình
-        _objectPlace = Instantiate(setObject, transform.position + new Vector3(0, 0, 1f), transform.rotation);
+        _objectPlace = Instantiate(setObject, transform.position + new Vector3(0, 0, 3f), transform.rotation);
 
         // Xóa class không cần thiết trên vật thể
         Destroy(_objectPlace.gameObject.GetComponent<ObjectController>());
@@ -144,13 +152,15 @@ public class Raycast : MonoBehaviour
             transform.rotation = hits[0].pose.rotation;
 
             //Đặt vị trí của tâm cộng thêm phần bù để hiển thị theo ý muốn
-            cursorChildObject.transform.position = hits[0].pose.position + new Vector3(0, 0, 1f);
+            cursorChildObject.transform.position = hits[0].pose.position + new Vector3(0, 0, 3f);
 
             // Nếu có object được chọn sẽ đật object ngay vị trí của tâm
             if (_objectPlace != null)
             {
                 //_objectPlace = Instantiate(objectToPlace, transform.position, transform.rotation);
-                _objectPlace.transform.position = hits[0].pose.position + new Vector3(0,0,1f);
+                //_objectPlace.transform.position = hits[0].pose.position + new Vector3(0,0,1f);
+                _objectPlace.transform.position = cursorChildObject.transform.position;
+
                 _objectPlace.transform.rotation = hits[0].pose.rotation;
             }
         }

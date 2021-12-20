@@ -12,9 +12,11 @@ public class ObjectController : MonoBehaviour
 
     public GameObject selectedEffect;
     // Start is called before the first frame update
+
     void Start()
     {
-        
+        if(transform.childCount >0)
+            selectedEffect = transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -26,6 +28,7 @@ public class ObjectController : MonoBehaviour
     Touch touch;
     private void OnMouseDown()
     {
+       /*
         touch = Input.GetTouch(0);
 
         // Nếu có UI phía trước thì không chọn được
@@ -38,7 +41,7 @@ public class ObjectController : MonoBehaviour
         objectMovement._objectMovement = this.gameObject;
 
         // Biến để không hiện thị cửa sổ chọn object khi click vào màn hình
-        raycast.isPointerObject = true;
+        //raycast.isPointerObject = true;
 
         // Set ẩn panel chọn các object
         raycast.panelButtonSelect.SetActive(false);
@@ -48,7 +51,11 @@ public class ObjectController : MonoBehaviour
 
         //
         selectedEffect.SetActive(true);
+        UIController.instance.panelMenuGame.SetActive(false);
+        */
     }
+
+
 
     // Hàm kiểm tra phía trước object có UI hiển thị không
     bool IsPointerOverUI(Touch touch)
