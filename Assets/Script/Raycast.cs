@@ -5,31 +5,37 @@ using UnityEngine.EventSystems;
 //using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
+
 public class Raycast : MonoBehaviour
 {
     // Tâm hiện vị trí để đặt đối tượng (Ảnh)
     public GameObject cursorChildObject;
+
     // Đối tượng được tạo
     public GameObject objectToPlace;
 
-    public ARRaycastManager raycastManager;
+    // Object được dùng để hiển thị vật thể đang được chọn
+    private GameObject _objectPlace;
+
+    [Space]
+    [SerializeField]
+    private ARRaycastManager raycastManager;
 
     // Camera chính dùng để lấy tọa độ để đặt vật thể
-    public Camera mainCam;
-    
+    [SerializeField]
+    private Camera mainCam;
+
+    [Space]
     // Các panel dùng để hiển thị các bảng chức năng trên UI
-    public GameObject panelNotification;
     public GameObject panelButtonSelect;
+    public GameObject panelNotification;
     public GameObject panelSelected;
 
+    [Space]
+    public GameObject objLeanTouch;
     [SerializeField]
-    private GameObject objLeanTouch;
-    //public ObjectMovement objectMovement;
+    private Vector3 offset;
 
-    //public bool isPointerObject = false;
-    void Start()
-    {
-    }
 
     void Update()
     {
@@ -90,16 +96,11 @@ public class Raycast : MonoBehaviour
     }
     */
 
-    GameObject obj;
     // Nút Yes sẽ đặt vật thể ra màn hình
     public void Yes()
     {
-
-        obj = Instantiate(objLeanTouch, transform.position + new Vector3(0, 0, 3f), transform.rotation);
-
         // Tạo vật thể tại vị trí được chọn
-        var a = GameObject.Instantiate(objectToPlace, transform.position + new Vector3(0, 0, 3f), transform.rotation);
-        a.transform.SetParent(obj.transform, false);
+        GameObject.Instantiate(objectToPlace, transform.position + offset, transform.rotation);
 
         // Xóa vật được chọn vì đã tạo ra vật thể mới
         Destroy(_objectPlace);
@@ -122,14 +123,12 @@ public class Raycast : MonoBehaviour
         Destroy(_objectPlace);
     }
 
-    // Object được dùng để hiển thị vật thể đang được chọn
-    public GameObject _objectPlace;
 
     // Thiết lập vật thể được chọn
     public void SetObject(GameObject setObject)
     {
         // cho vật thể được chọn và hiển thị ra ngay vị trí được chọn trên màn hình
-        _objectPlace = Instantiate(setObject, transform.position + new Vector3(0, 0, 3f), transform.rotation);
+        _objectPlace = Instantiate(setObject, transform.position + offset, transform.rotation);
 
         // Xóa class không cần thiết trên vật thể
         Destroy(_objectPlace.gameObject.GetComponent<ObjectController>());
@@ -152,7 +151,7 @@ public class Raycast : MonoBehaviour
             transform.rotation = hits[0].pose.rotation;
 
             //Đặt vị trí của tâm cộng thêm phần bù để hiển thị theo ý muốn
-            cursorChildObject.transform.position = hits[0].pose.position + new Vector3(0, 0, 3f);
+            cursorChildObject.transform.position = hits[0].pose.position +offset;
 
             // Nếu có object được chọn sẽ đật object ngay vị trí của tâm
             if (_objectPlace != null)

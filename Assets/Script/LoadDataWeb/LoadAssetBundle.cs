@@ -8,15 +8,8 @@ using UnityEngine.Networking;
 
 public class LoadAssetBundle : MonoBehaviour
 {
-    //public AssetBundle[] bundle;
-    public Button[] btn;
-
-    public Button btnPrefabs;
-
     [SerializeField]
     private Material materialCube;
-    [SerializeField]
-    private CreateButton createButton;
     // Start is called before the first frame update
     void Awake()
     {

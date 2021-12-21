@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+
 public class ObjectController : MonoBehaviour
 {
     // Panel select dùng để hiển thị khi click vào object
@@ -15,8 +16,12 @@ public class ObjectController : MonoBehaviour
 
     void Start()
     {
-        if(transform.childCount >0)
-            selectedEffect = transform.GetChild(0).gameObject;
+         selectedEffect = transform.GetChild(0).gameObject;
+
+
+        //DataStorage.furnitures[i].AddComponent<LeanPinchScale>();
+        //DataStorage.furnitures[i].AddComponent<LeanDragTranslate>();
+        //DataStorage.furnitures[i].AddComponent<LeanTwistRotateAxis>();
     }
 
     // Update is called once per frame
@@ -28,7 +33,7 @@ public class ObjectController : MonoBehaviour
     Touch touch;
     private void OnMouseDown()
     {
-       /*
+       
         touch = Input.GetTouch(0);
 
         // Nếu có UI phía trước thì không chọn được
@@ -36,6 +41,14 @@ public class ObjectController : MonoBehaviour
         {
             return;
         }
+
+        //selectedEffect.SetActive(true);
+
+        //raycast.objLeanTouch.transform.position = this.transform.position;
+        //raycast.objLeanTouch.transform.rotation = this.transform.rotation;
+        //raycast.objLeanTouch.transform.localScale = this.transform.localScale;
+
+        //transform.SetParent(raycast.objLeanTouch.transform);
 
         // Truyền object để di chuyển vào class ObjectMovement
         objectMovement._objectMovement = this.gameObject;
@@ -52,7 +65,7 @@ public class ObjectController : MonoBehaviour
         //
         selectedEffect.SetActive(true);
         UIController.instance.panelMenuGame.SetActive(false);
-        */
+        
     }
 
 
