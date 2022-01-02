@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 
+// Hàm để add onclick vào button với param đi kèm
 public static class ButtonExtension
 {
     public static void AddEventListener<T>(this Button button, T param, Action<T> OnClick)
@@ -22,82 +21,67 @@ public class CreateButton : MonoBehaviour
     [SerializeField]
     private GameObject buttonPrefab;
 
-    //[SerializeField]
-    public Dropdown dropdownType;
+    // Dropdown thể loại
+    [SerializeField]
+    private Dropdown dropdownType;
 
-    //private GameObject button;
 
-    //public static List<string> types = new List<string>();
-
-    //public static List<string> buttonsType = new List<string>();
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        DataStorage.type.Insert(0, "All");
 
-        //Invoke("CreateButtonInGameObject", 15);
-        //this.gameObject.AddComponent<ContentSizeFitter>();
+        dropdownType.AddOptions(DataStorage.type);
+
     }
 
-    public void LoadTypes(List<string> t)
+    public void Down()
     {
-
-        t.Insert(0, "All");
-
-        dropdownType.AddOptions(t);
+        CreateButtonInGameObject();
     }
 
-    public void CreateButtonInGameObject(int i, GameObject obj)
+    private void CreateButtonInGameObject()
     {
-
-
-        //Debug.Log("Length : " + DataStorage.furnitures.Length);
-       
-        /*
+        
         for (int i = 0; i < DataStorage.furnitures.Length; i++)
         {
             //Debug.Log(i);
+            // Tạo button và gán tên bằng loại object
             var button = Instantiate(buttonPrefab);
-            button.name = DataStorage.row[i].text;
+            button.name = DataStorage.row[i].type;
 
+            // Add sự kiện onclick cho nút và truyền game object tương ứng
             button.GetComponent<Button>().AddEventListener(DataStorage.furnitures[i], UIController.instance.ButtonSelectObject);
-
+            //Add vào panel select
             button.transform.SetParent(this.gameObject.transform, false);
+            //Tên hiển thị của button
             button.transform.GetChild(0).GetComponent<Text>().text = DataStorage.row[i].text;
+            //Gán hình ảnh vào button
             button.transform.GetChild(1).GetComponent<RawImage>().texture = DataStorage.images[i];
 
-            //GameObject a = Instantiate(DataStorage.furnitures[i]);
         }
-        */
-
-        var button = Instantiate(buttonPrefab);
-        button.name = DataStorage.row[i].type;
-
-        button.GetComponent<Button>().AddEventListener(obj, UIController.instance.ButtonSelectObject);
-
-        button.transform.SetParent(this.gameObject.transform, false);
-        button.transform.GetChild(0).GetComponent<Text>().text = DataStorage.row[i].text;
-        button.transform.GetChild(1).GetComponent<RawImage>().texture = DataStorage.images[i];
-
-        
     }
 
+    // Hàm chọn loại object
     public void SelecType()
     {
+        // Lấy giá trị hiện tại đang được chọn
         string dropdownSelected = dropdownType.options[dropdownType.value].text;
 
+        // Nếu là all thì sẽ hiển thị tất cả các button
         if(dropdownSelected == "All")
         {
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
                 gameObject.transform.GetChild(i).gameObject.SetActive(true);
-                //GameObject a = Instantiate(DataStorage.furnitures[i]);
-                //a.gameObject.transform.SetParent(button.transform.GetChild(1),false);
             }
         }
         else
         {
+            // Duyệt từng phần tử con của panel
             for (int i = 0; i < transform.childCount; i++)
             {
+                // Nếu khác với loại đang được chọn thì ẩn đi ngược lại thì không ẩn
                 if(transform.GetChild(i).name != dropdownSelected)
                 {
                     gameObject.transform.GetChild(i).transform.gameObject.SetActive(false);

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class UIController : MonoBehaviour
     public Raycast raycast;
     public GameObject panelSelect;
     [Space]
-    public GameObject canvas;
+    public GameObject panelButtonSelectObject;
     public ObjectMovement objectMovement;
     // Start is called before the first frame update
     [Space]
@@ -16,6 +14,8 @@ public class UIController : MonoBehaviour
 
     public static UIController instance;
     ObjectController objectController;
+
+
     void Start()
     {
         instance = this;
@@ -23,34 +23,33 @@ public class UIController : MonoBehaviour
 
     public void ButtonSelectObject(GameObject _object)
     {
-        // Set các giá trị của class Object controller
+        // truyền game object và các giá trị vào button
         raycast.objectToPlace = _object;
         raycast.panelNotification.SetActive(true);
-        objectController = raycast.objectToPlace.GetComponent<ObjectController>();
 
-        objectController.panelSelect = panelSelect;
-        objectController.raycast = raycast;
-
-        objectController.objectMovement = objectMovement;
-
-        //objectMovement.objectMovement = _object;
         raycast.SetObject(_object);
 
-        // Set active canvas
-        canvas.SetActive(false);
+        // Hàm play audio khi click vào
+        raycast.PlayAudio();
+        //Khi nhấn sẽ ẩn panel select
+        panelButtonSelectObject.SetActive(false);
     }
 
+    // Hàm để set active các game ocject trên UI
     public void SetActiveFalse(GameObject _object)
     {
         _object.SetActive(!_object.activeSelf);
     }
 
-    public void SetRaycat()
+    // Hàm set active true
+    public void SetTrue(GameObject obj)
     {
-        //raycast.isPointerObject = false;
-        //raycast.panelButtonSelect.SetActive(true);
-        objectMovement._objectMovement.GetComponent<ObjectController>().selectedEffect.SetActive(false);
-        //Debug.Log(objectMovement.objectMovement.GetComponent<ObjectController>().selectedEffect.activeSelf);
+        obj.SetActive(true);
+    }
 
+    // Hàm sẽ được gọi khi nhấn nút exit của panel select
+    public void SetEffectObjectSelect()
+    {
+        objectMovement._objectMovement.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
     }
 }

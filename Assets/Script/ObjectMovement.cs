@@ -1,18 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class ObjectMovement : MonoBehaviour
 { 
     public GameObject _objectMovement;
-    public Raycast raycast;
+    [SerializeField]
+    private Raycast raycast;
+
+    [SerializeField]
+    private GameObject panelDelete;
+    //[SerializeField]
+    //private GameObject panelSelected;
+
+
+    Vector3 offset;
 
     // Di chuyển theo chiều ngang (trái phải)
     public void MoveHorizontal(float dir)
     {
         _objectMovement.transform.position += new Vector3(0.1f * dir, 0, 0);
-        //_objectMovement.transform.position += new Vector3(0.1f * dir * Time.deltaTime, 0, 0);
     }
 
     // Di chuyển theo chiều dọc(trên dưới)
@@ -31,7 +36,8 @@ public class ObjectMovement : MonoBehaviour
         }
 
         _objectMovement.transform.localScale += new Vector3(scale * 0.2f, scale * 0.2f, scale * 0.2f);
-        
+
+        offset += new Vector3(0, scale * 0.15f, 0);
     }
 
     // DI chuyển lên phía trước
@@ -43,12 +49,20 @@ public class ObjectMovement : MonoBehaviour
     // Di chuyển ra phía sau
     public void Rotate(float dir)
     {
-        _objectMovement.transform.localEulerAngles += new Vector3(0, 3 * dir, 0);
+        _objectMovement.transform.localEulerAngles += new Vector3(0, 5 * dir, 0);
     }
 
-    // Xóa và đặt lại các panel
+    // Hiện panel lựa chọn xóa hay không và ẩn panel select
     public void Destroy()
     {
+        panelDelete.SetActive(true);
+        raycast.panelSelected.SetActive(false);
+    }
+
+    // Xác nhận xóa object và thiết lập lại các panel
+    public void Yes()
+    {
+        panelDelete.SetActive(false);
         Destroy(_objectMovement);
         UIController.instance.panelMenuGame.SetActive(true);
         raycast.panelSelected.SetActive(false);

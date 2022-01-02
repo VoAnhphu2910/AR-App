@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 public class ObjectController : MonoBehaviour
 {
     // Panel select dùng để hiển thị khi click vào object
     public GameObject panelSelect;
     public Raycast raycast; // Class raycast
+    [Space]
     public ObjectMovement objectMovement;   // Class ObjectMovement
 
     public GameObject selectedEffect;
@@ -16,61 +15,51 @@ public class ObjectController : MonoBehaviour
 
     void Start()
     {
-         selectedEffect = transform.GetChild(0).gameObject;
-
-
-        //DataStorage.furnitures[i].AddComponent<LeanPinchScale>();
-        //DataStorage.furnitures[i].AddComponent<LeanDragTranslate>();
-        //DataStorage.furnitures[i].AddComponent<LeanTwistRotateAxis>();
+         selectedEffect = transform.GetChild(0).transform.GetChild(0).gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+   
+    //Hàm sẽ gọi khi nhấn vào object
+    private void OnMouseDown()
     {
-        
+        Select();
     }
 
     Touch touch;
-    private void OnMouseDown()
+    public void Select()
     {
-       
-        touch = Input.GetTouch(0);
-
-        // Nếu có UI phía trước thì không chọn được
+        //// Nếu có UI phía trước thì không chọn được
         if (IsPointerOverUI(touch))
         {
             return;
         }
 
-        //selectedEffect.SetActive(true);
-
-        //raycast.objLeanTouch.transform.position = this.transform.position;
-        //raycast.objLeanTouch.transform.rotation = this.transform.rotation;
-        //raycast.objLeanTouch.transform.localScale = this.transform.localScale;
-
-        //transform.SetParent(raycast.objLeanTouch.transform);
-
-        // Truyền object để di chuyển vào class ObjectMovement
-        objectMovement._objectMovement = this.gameObject;
-
-        // Biến để không hiện thị cửa sổ chọn object khi click vào màn hình
-        //raycast.isPointerObject = true;
-
-        // Set ẩn panel chọn các object
-        raycast.panelButtonSelect.SetActive(false);
-
-        // Hiện panel các chức năng khi click vào đối tượng
-        panelSelect.SetActive(true);
-
-        //
-        selectedEffect.SetActive(true);
-        UIController.instance.panelMenuGame.SetActive(false);
+        // Nếu có object khác đang được chọn thì sẽ tăt effect của object đó trước khi hiển thị effect của object mới
+        if (objectMovement._objectMovement != null)
+        {
+            objectMovement._objectMovement.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        }
         
+        // Truyền object để di chuyển vào class ObjectMovement
+        this.objectMovement._objectMovement = this.gameObject;
+        
+        // Set ẩn panel chọn các object
+        this.raycast.panelButtonSelect.SetActive(false);
+
+        this.raycast.PlayAudio();
+        // Hiện panel các chức năng khi click vào đối tượng
+        this.panelSelect.SetActive(true);
+
+
+        // Hiển thị effect đang chọn
+        this.selectedEffect.SetActive(true);
+        // Ẩn panel menu main khi chọn object 
+        UIController.instance.panelMenuGame.SetActive(false);
     }
 
 
-
-    // Hàm kiểm tra phía trước object có UI hiển thị không
+    
+     //Hàm kiểm tra phía trước object có UI hiển thị không
     bool IsPointerOverUI(Touch touch)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -79,4 +68,5 @@ public class ObjectController : MonoBehaviour
         EventSystem.current.RaycastAll(eventData, results);
         return results.Count > 0;
     }
+    
 }

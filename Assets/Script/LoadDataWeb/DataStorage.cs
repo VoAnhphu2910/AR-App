@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DataStorage
 {
     public static GameObject[] furnitures;
     public static Texture[] images;
-    public static Button[] buttons;
+    public static List<string> type;
+
+    public static bool isStart = true;
 
     public struct Data
     {
